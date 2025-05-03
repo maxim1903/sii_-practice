@@ -1,0 +1,7 @@
+train: /Users/dashkevich/Desktop/moto_yolo/data/train
+val: /Users/dashkevich/Desktop/moto_yolo/data/valid
+test: /Users/dashkevich/Desktop/moto_yolo/data/test
+
+
+nc: 1
+names: ['motorcycle']

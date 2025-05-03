@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Motorcycle Detector</title>
+</head>
+<body>
+  <h1>Детекция мотоциклов с YOLO</h1>
+  <form method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" required>
+    <input type="submit" value="Обработать изображение">
+  </form>
+
+  {% if uploaded_image %}
+    <h2>Загруженное изображение:</h2>
+    <img src="{{ url_for('static', filename='uploads/' + uploaded_image) }}" width="300">
+
+    <h2>Результат детекции:</h2>
+    <img src="{{ url_for('static', filename='results/' + result_image) }}" width="300">
+  {% endif %}
+</body>
+</html>

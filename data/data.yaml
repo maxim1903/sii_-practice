@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['motorcycle']
+
+roboflow:
+  workspace: vehicle-detection-ipzxn
+  project: motorcycle-detection-ft6pp
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/vehicle-detection-ipzxn/motorcycle-detection-ft6pp/dataset/2
