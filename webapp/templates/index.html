@@ -1,22 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Motorcycle Detector</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Детекция мотоциклов с YOLOv8</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: linear-gradient(to bottom, #e0eafc, #f8f9fa);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #212529;
+        }
+
+        .container {
+            padding-top: 60px;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #333;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .upload-section {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .upload-section:hover {
+            transform: scale(1.02);
+        }
+
+        .image-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 50px;
+            flex-wrap: wrap;
+            transition: transform 0.5s ease;
+        }
+
+        .image-box {
+            width: 45%;
+            transition: transform 0.5s ease;
+        }
+
+        .image-box:hover {
+            transform: scale(1.05);
+        }
+
+        .card-img {
+            max-height: 500px;
+            width: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background-color: #0d6efd;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .footer {
+            background-color: #0d6efd;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin-top: 70px;
+            font-size: 1rem;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Поддержка мобильных устройств */
+        @media (max-width: 768px) {
+            .image-box {
+                width: 100%;
+            }
+
+            .title {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Анимации и hover эффекты */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.7s ease-in-out;
+        }
+
+    </style>
 </head>
 <body>
-  <h1>Детекция мотоциклов с YOLO</h1>
-  <form method="post" enctype="multipart/form-data">
-    <input type="file" name="image" accept="image/*" required>
-    <input type="submit" value="Обработать изображение">
-  </form>
 
-  {% if uploaded_image %}
-    <h2>Загруженное изображение:</h2>
-    <img src="{{ url_for('static', filename='uploads/' + uploaded_image) }}" width="300">
+<div class="container text-center fadeInUp">
+    <i class="bi bi-camera-reels-fill text-primary" style="font-size: 4rem;"></i>
+    <h1 class="title mt-3">Детекция мотоциклов с YOLOv8</h1>
+    <p class="subtitle">Загрузите изображение и получите результат обработки с помощью модели YOLOv8</p>
 
-    <h2>Результат детекции:</h2>
-    <img src="{{ url_for('static', filename='results/' + result_image) }}" width="300">
-  {% endif %}
+    <!-- Форма загрузки изображения -->
+    <form method="POST" enctype="multipart/form-data" class="upload-section mx-auto">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="image" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-3">
+                    <i class="bi bi-upload"></i> Загрузить и обработать
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Показ изображений (оригинал и результат) -->
+    {% if uploaded_image and result_image %}
+    <div class="image-grid">
+        <div class="image-box">
+            <div class="card shadow border-info">
+                <div class="card-header">Оригинальное изображение</div>
+                <div class="card-body bg-light">
+                    <img src="{{ url_for('static', filename='uploads/' + uploaded_image) }}" class="card-img" alt="Загруженное изображение">
+                </div>
+            </div>
+        </div>
+
+        <div class="image-box">
+            <div class="card shadow border-success">
+                <div class="card-header">Результат детекции</div>
+                <div class="card-body bg-light">
+                    <img src="{{ url_for('static', filename='results/' + result_image) }}" class="card-img" alt="Результат детекции">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Подвал -->
+<div class="footer mt-5">
+    <p>🚀 Проект по машинному обучению | YOLOv8 | SII Practice 2025</p>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
